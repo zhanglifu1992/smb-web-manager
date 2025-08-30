@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- 系统信息卡片 -->
+    <div class="card bg-base-100 shadow-xl col-span-1">
+        <div class="card-body">
+            <h2 class="card-title">系统信息</h2>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <tbody>
+                        <tr><th>系统</th><td>{{ system_info.system }}</td></tr>
+                        <tr><th>主机名</th><td>{{ system_info.hostname }}</td></tr>
+                        <tr><th>版本</th><td>{{ system_info.release }}</td></tr>
+                        <tr><th>架构</th><td>{{ system_info.machine }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速操作卡片 -->
+    <div class="card bg-base-100 shadow-xl col-span-1">
+        <div class="card-body">
+            <h2 class="card-title">快速操作</h2>
+            <div class="flex flex-col gap-2">
+                <button class="btn btn-primary" onclick="mountAll()">挂载全部</button>
+                <button class="btn btn-secondary" onclick="unmountAll()">卸载全部</button>
+                <button class="btn btn-accent" onclick="refreshStatus()">刷新状态</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计信息卡片 -->
+    <div class="card bg-base-100 shadow-xl col-span-1">
+        <div class="card-body">
+            <h2 class="card-title">统计信息</h2>
+            <div class="stats stats-vertical shadow">
+                <div class="stat">
+                    <div class="stat-title">总挂载点</div>
+                    <div class="stat-value">{{ mounts|length }}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">已挂载</div>
+                    <div class="stat-value">{{ mounts|selectattr('is_mounted')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 挂载点列表 -->
+    <div class="card bg-base-100 shadow-xl col-span-3">
+        <div class="card-body">
+            <h2 class="card-title">挂载点列表</h2>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>服务器</th>
+                            <th>共享</th>
+                            <th>挂载点</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mounts-table">
+                        {% for mount in mounts %}
+                        <tr>
+                            <td>{{ mount.name }}</td>
+                            <td>{{ mount.server }}</td>
+                            <td>{{ mount.share }}</td>
+                            <td>{{ mount.mount_point }}</td>
+                            <td>
+                                {% if mount.is_mounted %}
+                                <div class="badge badge-success">已挂载</div>
+                                {% else %}
+                                <div class="badge badge-error">未挂载</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="flex gap-2">
+                                    {% if not mount.is_mounted %}
+                                    <button class="btn btn-sm btn-success" onclick="mountShare({{ mount.id }})">挂载</button>
+                                    {% else %}
+                                    <button class="btn btn-sm btn-warning" onclick="unmountShare({{ mount.id }})">卸载</button>
+                                    {% endif %}
+                                    <button class="btn btn-sm btn-info">详情</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

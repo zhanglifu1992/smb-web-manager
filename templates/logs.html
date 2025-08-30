@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <h2 class="card-title">系统日志</h2>
+        <div class="flex justify-end mb-4">
+            <button class="btn btn-sm btn-primary" onclick="refreshLogs()">刷新日志</button>
+            <button class="btn btn-sm btn-secondary" onclick="clearLogs()">清除日志</button>
+        </div>
+        <div class="bg-base-200 p-4 rounded-box h-96 overflow-y-auto">
+            <pre id="log-content">加载中...</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

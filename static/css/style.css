@@ -1,0 +1,42 @@
+/* 自定义样式 */
+.table th:first-child {
+    position: relative;
+}
+
+.log-entry {
+    border-left: 3px solid transparent;
+    padding-left: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.log-entry.info {
+    border-left-color: #3b82f6;
+}
+
+.log-entry.warning {
+    border-left-color: #f59e0b;
+}
+
+.log-entry.error {
+    border-left-color: #ef4444;
+}
+
+.log-entry.success {
+    border-left-color: #10b981;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}

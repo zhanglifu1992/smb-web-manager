@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 gap-6">
+    <!-- 添加新配置表单 -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">添加新挂载配置</h2>
+            <form id="add-mount-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">配置名称</span>
+                    </label>
+                    <input type="text" name="name" placeholder="例如: 家庭NAS" class="input input-bordered" required>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">服务器地址</span>
+                    </label>
+                    <input type="text" name="server" placeholder="例如: 192.168.1.100 或 nas.example.com" class="input input-bordered" required>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">共享名称</span>
+                    </label>
+                    <input type="text" name="share" placeholder="例如: documents" class="input input-bordered" required>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">挂载点路径</span>
+                    </label>
+                    <input type="text" name="mount_point" placeholder="例如: /mnt/nas" class="input input-bordered" required>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">用户名</span>
+                    </label>
+                    <input type="text" name="username" placeholder="SMB用户名" class="input input-bordered" required>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">密码</span>
+                    </label>
+                    <input type="password" name="password" placeholder="SMB密码" class="input input-bordered">
+                </div>
+                <div class="form-control md:col-span-2">
+                    <label class="label">
+                        <span class="label-text">其他选项</span>
+                    </label>
+                    <input type="text" name="options" placeholder="额外的挂载选项" class="input input-bordered">
+                </div>
+                <div class="form-control mt-6 md:col-span-2">
+                    <button type="submit" class="btn btn-primary">添加配置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 现有配置列表 -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">现有配置</h2>
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>服务器</th>
+                            <th>共享</th>
+                            <th>挂载点</th>
+                            <th>用户名</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="configs-table">
+                        {% for mount in mounts %}
+                        <tr>
+                            <td>{{ mount.name }}</td>
+                            <td>{{ mount.server }}</td>
+                            <td>{{ mount.share }}</td>
+                            <td>{{ mount.mount_point }}</td>
+                            <td>{{ mount.username }}</td>
+                            <td>
+                                {% if mount.is_mounted %}
+                                <div class="badge badge-success">已挂载</div>
+                                {% else %}
+                                <div class="badge badge-error">未挂载</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-sm btn-warning">编辑</button>
+                                    <button class="btn btn-sm btn-error" onclick="deleteConfig({{ mount.id }})">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
